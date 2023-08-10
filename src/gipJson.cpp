@@ -20,10 +20,7 @@ void gipJson::loadJsonFile(const std::string& filename) {
 	std::string filecontent = file.getText();
 
 	js = nlohmann::json::parse(filecontent);
-//	gLogi("gCanvas") << "json:" << js.dump(4);
-//	std::cout << js["fruit"] << std::endl;
-//	std::cout << js["size"] << std::endl;
-//	std::cout << js["color"] << std::endl;
+	file.close();
 }
 
 std::string gipJson::getValue(const std::string& key) {
@@ -35,12 +32,8 @@ void gipJson::setValue(const std::string& key, const std::string& newValue) {
 }
 
 void gipJson::saveJsonFile(const std::string& filename) {
-//    std::ofstream outfile(filename);
-//    outfile << std::setw(4) << js << std::endl;
       gFile file;
       file.loadFile(filename, gFile::FILEMODE_WRITEONLY, false);
 	  file.write(js.dump());
-
-
-
+	  file.close();
 }
