@@ -32,12 +32,8 @@ void gipJson::setValue(const std::string& key, const std::string& newValue) {
 }
 
 void gipJson::saveJsonFile(const std::string& filename) {
-//    std::ofstream outfile(filename);
-//    outfile << std::setw(4) << js << std::endl;
       gFile file;
       file.loadFile(filename, gFile::FILEMODE_WRITEONLY, false);
 	  file.write(js.dump());
-
-
-
+	  file.close();
 }
