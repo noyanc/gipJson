@@ -20,27 +20,60 @@ void gipJson::loadJsonFile(const std::string& filename) {
 	std::string filecontent = file.getText();
 
 	js = nlohmann::json::parse(filecontent);
-//	gLogi("gCanvas") << "json:" << js.dump(4);
-//	std::cout << js["fruit"] << std::endl;
-//	std::cout << js["size"] << std::endl;
-//	std::cout << js["color"] << std::endl;
+
 }
 
 std::string gipJson::getValue(const std::string& key) {
-	return js[key];
+    std::vector<std::string> segments;
+    std::istringstream segmentStream(key);
+    std::string segment;
+    while (std::getline(segmentStream, segment, '.')) {
+        segments.push_back(segment);
+    }
+
+    nlohmann::json* currentObject = &js;
+    for (const std::string& segment : segments) {
+        if (currentObject->contains(segment)) {
+            currentObject = &(*currentObject)[segment];
+        } else {
+            return ""; // Return an empty string if key doesn't exist
+        }
+    }
+
+    if (currentObject->is_string()) {
+        return currentObject->get<std::string>();
+    } else if (currentObject->is_array()) {
+        return currentObject->dump(); // Return JSON representation of the array
+    } else {
+        return ""; // Return empty string for unsupported types
+    }
 }
 
 void gipJson::setValue(const std::string& key, const std::string& newValue) {
-	js[key] = newValue;
+    std::vector<std::string> segments;
+    std::istringstream segmentStream(key);
+    std::string segment;
+    while (std::getline(segmentStream, segment, '.')) {
+        segments.push_back(segment);
+    }
+
+    nlohmann::json* currentObject = &js;
+    for (size_t i = 0; i < segments.size() - 1; ++i) {
+        if (currentObject->contains(segments[i])) {
+            currentObject = &(*currentObject)[segments[i]];
+        } else {
+            (*currentObject)[segments[i]] = nlohmann::json::object();
+            currentObject = &(*currentObject)[segments[i]];
+        }
+    }
+
+    (*currentObject)[segments.back()] = newValue;
 }
 
+
 void gipJson::saveJsonFile(const std::string& filename) {
-//    std::ofstream outfile(filename);
-//    outfile << std::setw(4) << js << std::endl;
       gFile file;
       file.loadFile(filename, gFile::FILEMODE_WRITEONLY, false);
 	  file.write(js.dump());
-
-
 
 }
