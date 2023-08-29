@@ -20,23 +20,17 @@ gCanvas::~gCanvas() {
 void gCanvas::setup() {
 	//gLogi("gCanvas") << "setup";
 	logo.loadImage("glistengine_logo.png");
-	json.loadJsonFile("example_1.json");
-    gLogi("gCanvas") << "Original value of 'fruit': " << json.getValue("fruit");
-    gLogi("gCanvas") << "Original value of 'size': " << json.getValue("size");
-    gLogi("gCanvas") << "Original value of 'color': " << json.getValue("color");
-
-    json.setValue("fruit", "Orange");
-    json.setValue("size", "Small");
-    json.setValue("color", "Black");
-
-    gLogi("gCanvas") << "New value of 'fruit': " << json.getValue("fruit");
-    gLogi("gCanvas") << "New value of 'size': " << json.getValue("size");
-    gLogi("gCanvas") << "New value of 'color': " << json.getValue("color");
-
-	//gLogi("gCanvas") << "value:" << json.getValue("fruit");
-
-//    json.saveJsonFile("test.json");
-
+	json.loadJsonFile("example_2.json");
+	std::string question = json.getValue("quiz.maths.q1.question");
+	gLogi("gCanvas") << "Question from JSON: " << question;
+    std::string options = json.getValue("quiz.maths.q1.options");
+	gLogi("gCanvas") << "Options from JSON: " << options;
+    json.setValue("quiz.maths.q1.options", "Option A, Option B, Option C, Option D");
+	json.setValue("quiz.maths.q2.answer", "5");
+	gLogi("gCanvas") << "New answer for q2 set to '5'";
+    gLogi("gCanvas") << "Updated options for q1 'Option A, Option B, Option C, Option D'";
+	json.saveJsonFile("test.json");
+	gLogi("gCanvas") << "Saving JSON data to 'test.json'";
 }
 
 void gCanvas::update() {
