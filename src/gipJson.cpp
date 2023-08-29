@@ -18,7 +18,6 @@ void gipJson::loadJsonFile(const std::string& filename) {
 	gFile file;
 	file.loadFile(filename, gFile::FILEMODE_READONLY, false);
 	std::string filecontent = file.getText();
-
 	js = nlohmann::json::parse(filecontent);
 	file.close();
 }
@@ -30,22 +29,23 @@ std::string gipJson::getValue(const std::string& key) {
     while (std::getline(segmentStream, segment, '.')) {
         segments.push_back(segment);
     }
-
     nlohmann::json* currentObject = &js;
     for (const std::string& segment : segments) {
         if (currentObject->contains(segment)) {
             currentObject = &(*currentObject)[segment];
         } else {
-            return ""; // Return an empty string if key doesn't exist
+            return "";
+            // Return an empty string if key doesn't exist
         }
     }
-
     if (currentObject->is_string()) {
         return currentObject->get<std::string>();
     } else if (currentObject->is_array()) {
-        return currentObject->dump(); // Return JSON representation of the array
+        return currentObject->dump();
+        // Return JSON representation of the array
     } else {
-        return ""; // Return empty string for unsupported types
+        return "";
+        // Return empty string for unsupported types
     }
 }
 
@@ -56,7 +56,6 @@ void gipJson::setValue(const std::string& key, const std::string& newValue) {
     while (std::getline(segmentStream, segment, '.')) {
         segments.push_back(segment);
     }
-
     nlohmann::json* currentObject = &js;
     for (size_t i = 0; i < segments.size() - 1; ++i) {
         if (currentObject->contains(segments[i])) {
@@ -66,13 +65,12 @@ void gipJson::setValue(const std::string& key, const std::string& newValue) {
             currentObject = &(*currentObject)[segments[i]];
         }
     }
-
     (*currentObject)[segments.back()] = newValue;
 }
 
 void gipJson::saveJsonFile(const std::string& filename) {
-      gFile file;
-      file.loadFile(filename, gFile::FILEMODE_WRITEONLY, false);
-	  file.write(js.dump());
-	  file.close();
+    gFile file;
+    file.loadFile(filename, gFile::FILEMODE_WRITEONLY, false);
+	file.write(js.dump());
+	file.close();
 }
