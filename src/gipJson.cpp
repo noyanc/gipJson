@@ -22,6 +22,10 @@ void gipJson::loadJsonFile(const std::string& filename) {
 	file.close();
 }
 
+void gipJson::loadJsonText(const std::string& jsonText) {
+	js = nlohmann::json::parse(jsonText);
+}
+
 std::string gipJson::getValue(const std::string& key) {
     std::vector<std::string> segments;
     std::istringstream segmentStream(key);

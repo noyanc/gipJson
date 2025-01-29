@@ -27,6 +27,12 @@ public:
 	void loadJsonFile(const std::string& filename);
 
 	/**
+	 * @brief Load JSON data from a text string.
+	 * @param jsonText The text in JSON format.
+	 */
+	void loadJsonText(const std::string& jsonText);
+
+	/**
 	 * @brief Get the value associated with a key.
 	 * @param key The key in the JSON structure (e.g., "quiz.maths.q1.options").
 	 * @return The value associated with the key.
